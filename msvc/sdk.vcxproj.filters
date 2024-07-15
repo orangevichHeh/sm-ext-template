@@ -24,6 +24,9 @@
     <ClCompile Include="..\..\..\public\smsdk_ext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\natives.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\extension.h">
@@ -33,6 +36,9 @@
       <Filter>SourceMod SDK</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\public\smsdk_ext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\natives.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

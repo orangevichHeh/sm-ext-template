@@ -41,8 +41,12 @@ Sample g_Sample;		/**< Global singleton for extension's main interface */
 SMEXT_LINK(&g_Sample);
 
 bool Sample::SDK_OnLoad(char* error, size_t maxlen, bool late) {
-	sharesys->AddNatives(myself, g_ExtensionNatives);
+	smutils->LogMessage(myself, "Sample extension has been loaded.");
 	return true;
+}
+
+void Sample::SDK_OnAllLoaded() {
+	sharesys->AddNatives(myself, g_ExtensionNatives);
 }
 
 void Sample::SDK_OnUnload()

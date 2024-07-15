@@ -1,7 +1,7 @@
 #include "natives.h"
 
 static cell_t Extension_Loaded(IPluginContext* pContext, const cell_t* params) {
-	smutils->LogMessage(myself, "Sample extension has been loaded.");
+	smutils->LogMessage(myself, "Sample is loaded.");
 	return 0;
 }
 

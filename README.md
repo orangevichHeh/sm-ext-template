@@ -1,3 +1,7 @@
+# Requirements
+- [SourceMod (1.12)](https://www.sourcemod.net/)
+- [MM:Source (2.0)](https://www.sourcemm.net/)
+
 # Prepare
  - Install all [SDKs, Sourcemod and Metamod:Source](https://wiki.alliedmods.net/Building_SourceMod#Downloading_Source_and_Dependencies)
  - Add SDKs, Sourcemod and Metamod:Source to **Enviroments**:
@@ -15,6 +19,7 @@
  - Create build folder
  - Goto build folder and run a command prompt
  - Run `python3 ../configure.py`
+   - On linux run `CC=clang CXX=clang++ python3 ../configure.py` 
  - Then `ambuild`
 
 # Afterwords
