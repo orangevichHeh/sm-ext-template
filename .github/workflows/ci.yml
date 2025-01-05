@@ -1,0 +1,117 @@
+name: Build
+
+on: 
+  push:
+    branches:
+     - main
+  pull_request:
+    branches:
+     - main
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+        include:
+          - os: ubuntu-24.04
+            os_short: linux
+            compiler_cc: clang
+            compiler_cxx: clang++
+          - os: windows-latest
+            os_short: win
+            compiler_cc: msvc
+    runs-on: ${{ matrix.os }}
+    name: Build on ${{ matrix.os }}
+
+    env:
+      SDKS: '["tf2","l4d2","css"]'
+      ARCH: 'x86,x86_64'
+      DEPENDENCIES_FOLDER: dependencies
+      DEPENDENCIES_ROOT: ${{ github.workspace }}/dependencies
+      REPO_NAME: ${{ github.event.repository.name }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      # Setup Python for AMBuild
+      - uses: actions/setup-python@v5
+        name: Setup Python 3.9
+        with:
+          python-version: 3.9
+          
+      - name: Install AMBuild
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install git+https://github.com/alliedmodders/ambuild
+
+      - name: Creating folders
+        shell: bash
+        run: |
+          mkdir -p "${{ github.workspace }}/build"
+          mkdir -p "${{ env.DEPENDENCIES_FOLDER }}"
+          
+      - name: Getting SourceMod
+        uses: actions/checkout@v4
+        with:
+          repository: alliedmodders/sourcemod
+          path: ${{ env.DEPENDENCIES_ROOT }}/sourcemod
+          submodules: recursive
+     
+      - name: Getting Metamod:Source
+        uses: actions/checkout@v4
+        with:
+          repository: alliedmodders/metamod-source
+          ref: ${{ env.MMSOURCE_VERSION }}
+          path: ${{ env.DEPENDENCIES_ROOT }}/metamod-source
+          submodules: recursive
+          
+      - name: Getting SDKs
+        shell: bash
+        run: |
+          cd dependencies
+          git clone --mirror https://github.com/alliedmodders/hl2sdk hl2sdk-proxy-repo
+          sdks=(${{ join(fromJSON(env.SDKS), ' ') }})
+          for sdk in "${sdks[@]}"
+          do
+            git clone hl2sdk-proxy-repo -b $sdk hl2sdk-$sdk
+          done
+          ls -lah
+          cd "${{ github.workspace }}"
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            gcc-multilib g++-multilib libstdc++6 lib32stdc++6 \
+            libc6-dev libc6-dev-i386 linux-libc-dev \
+            linux-libc-dev:i386 lib32z1-dev ${{ matrix.compiler_cc }}
+
+      - name: Select clang compiler
+        if: runner.os == 'Linux'
+        run: |
+          echo "CC=${{ matrix.compiler_cc }}" >> $GITHUB_ENV
+          echo "CXX=${{ matrix.compiler_cxx }}" >> $GITHUB_ENV
+          ${{ matrix.compiler_cc }} --version
+          ${{ matrix.compiler_cxx }} --version
+
+      - name: Building
+        run: |
+          cd "${{ github.workspace }}/build"
+          python ../configure.py --enable-optimize --sdks=${{ join(fromJSON(env.SDKS)) }} --targets=${{ env.ARCH }} --sm-path=${{ env.DEPENDENCIES_ROOT }}/sourcemod --mms-path=${{ env.DEPENDENCIES_ROOT }}/metamod-source --hl2sdk-root=${{ env.DEPENDENCIES_ROOT }}
+          ambuild
+
+      - shell: bash
+        run: |
+          echo "SHA_SHORT=${GITHUB_SHA::7}" >> $GITHUB_ENV
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.REPO_NAME }}-${{ matrix.os_short }}-${{ env.SHA_SHORT }}
+          path: |
+              ${{ github.workspace }}/build/package/*

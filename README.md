@@ -1,5 +1,5 @@
 # Sourcemod Extension Template
-This template is created for a quick start of sourcemod extension development. I do not claim that my template is correct. This project has a Visual Studio solution with customizations such as included headers from `sourcemod/public`, as well as CDetour (added `IGameConfigs.h` to detours.h) and safetyhook (built with ambuild). \
+This template is created for a quick start of sourcemod extension development. I do not claim that my template is correct. This project has a Visual Studio solution with included headers from `sourcemod/public`, as well as CDetour (added `IGameConfigs.h` to detours.h) and safetyhook (built with ambuild). \
 Template uses c++20. \
 Included `safetyhook` and `CDetour`.
 
@@ -9,6 +9,7 @@ Included `safetyhook` and `CDetour`.
  - Python 3.3 or greater
  - [AMBuild 2.2](https://github.com/alliedmodders/ambuild)
  - Windows: 
+   - MSVC 2019 16.11 (v1929)
    - [Visual Studio 2022](https://visualstudio.microsoft.com/) and Dependencies:
      - MSVC v140 - VS 2015 C++ build tools (v14.00)
      - MSVC v141 - VS 2017 C++ build tools x64 or x86 (v14.16)
@@ -16,9 +17,10 @@ Included `safetyhook` and `CDetour`.
      - Windows Universal CRT SDK
      - Windows 10 SDK
  - Linux:
+   - clang-16 *OR* gcc-8 and later
    - Ubuntu/Debian:
      - `dpkg --add-architecture i386`
-	 - `apt get install clang lib32stdc++-7-dev lib32z1-dev libc6-dev-i386 linux-libc-dev:i386`
+	 - `apt get install clang lib32stdc++6 lib32z1-dev libc6-dev-i386 linux-libc-dev:i386`
      - `apt get install g++-multilib` (for x64 system)
    - ArchLinux:
      - Enable multilib repository
@@ -39,11 +41,11 @@ Included `safetyhook` and `CDetour`.
 ## Configuring & Building
  - Create build folder
  - Goto build folder
- - Run `python3 ../configure.py`
-   - On Linux run `CC=clang CXX=clang++ python3 ../configure.py`
+ - Run `python3 ../configure.py --enable-optimize`
+   - On Linux run `CC=clang CXX=clang++ python3 ../configure.py --enable-optimize`
    - On Windows: 
-     - Run `Developer Command Prompt for VS 2022` or with default cmd opens bat `%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars*.bat` ( or `%ProgramFiles%\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat`
-	 - Change working directory to build folder of extension and run `py ../configure.py`
+     - Run `Developer Command Prompt for VS 2022` or with default cmd opens bat `%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars*.bat` or `%ProgramFiles%\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat`
+	 - Change working directory to build folder of extension and run `py ../configure.py --enable-optimize`
  - Then `ambuild`
  - Result of build in `package` directory
 
@@ -61,7 +63,7 @@ Included `safetyhook` and `CDetour`.
 1. If your extension will not be included for plugins, but for example will hook some functions, you can create an autoload file that will load the extension with the server automatically. To do this, in the `addons/sourcemod` folder make a directory `extensions` and in it create a file `name.autoload`, where _name_ is the name of your extension.
 
 ## `PackageScript` File
-This file is used to add the necessary files for your expansion to work, like for example: gamedata, config or autoload
+This file is used to add the necessary files for your expansion to work, like for example: gamedata, config or autoload.
 To add autoload you need to uncomment the following lines (Autoload extension): [PackageScript#L49-51](https://github.com/orangevichHeh/sm-ext-template/blob/main/PackageScript#L49-L51)
 
 ## Credits
