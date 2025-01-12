@@ -6,8 +6,8 @@ projectName = 'sample'
 
 # smsdk_ext.cpp will be automatically added later
 sourceFiles = [
-  'extension.cpp',
-  'natives.cpp',
+  'src/extension.cpp',
+  'src/natives/natives.cpp',
 ]
 
 project = builder.LibraryProject(projectName)

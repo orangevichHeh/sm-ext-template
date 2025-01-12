@@ -17,7 +17,7 @@ Included `safetyhook` and `CDetour`.
      - Windows Universal CRT SDK
      - Windows 10 SDK
  - Linux:
-   - clang-16 *OR* gcc-8 and later
+   - `clang-16` or greater *OR* `gcc-8` or greater
    - Ubuntu/Debian:
      - `dpkg --add-architecture i386`
 	 - `apt get install clang lib32stdc++6 lib32z1-dev libc6-dev-i386 linux-libc-dev:i386`
@@ -52,19 +52,21 @@ Included `safetyhook` and `CDetour`.
 ## Afterwords
 1. To rename the extension from `sample` to another extension, you need to navigate through the following files:
    - [AMBuilder](https://github.com/orangevichHeh/sm-ext-template/blob/main/AMBuilder#L5)
-   - [smsdk_config.h](https://github.com/orangevichHeh/sm-ext-template/blob/main/smsdk_config.h#L41-L48)
-   - [natives.cpp](https://github.com/orangevichHeh/sm-ext-template/blob/main/natives.cpp#L4-L10)
-   - [extension.h](https://github.com/orangevichHeh/sm-ext-template/blob/main/extension.h#L49)
-   - [extension.cpp](https://github.com/orangevichHeh/sm-ext-template/blob/main/extension.cpp#L39-L55)
+   - [smsdk_config.h](https://github.com/orangevichHeh/sm-ext-template/blob/main/src/smsdk_config.h#L41-L48)
+   - [natives.cpp](https://github.com/orangevichHeh/sm-ext-template/blob/main/src/natives/natives.cpp#L4-L10)
+   - [extension.h](https://github.com/orangevichHeh/sm-ext-template/blob/main/src/extension.h#L49)
+   - [extension.cpp](https://github.com/orangevichHeh/sm-ext-template/blob/main/src/extension.cpp#L39-L55)
    - Comments in source code
-1. If you want to add a new **.cpp** file to the project, you need to add a new line in the `AMBuilder` file in the sourceFiles array, as well as your file name.
+1. If you want to add a new **.cpp** file to the project, you need to add a new line in the [AMBuilder#L8](https://github.com/orangevichHeh/sm-ext-template/blob/main/AMBuilder#L8) file in the sourceFiles array.
 1. To build x64, add the `--targets=x86_64` argument to configure.py (e.g. `py ../configure.py --targets=x86_64`).
 1. To build specific games, add the `--sdks` argument by listing the sdks separated by commas (e.g. `py ../configure.py --sdks=tf2,l4d2`).
 1. If your extension will not be included for plugins, but for example will hook some functions, you can create an autoload file that will load the extension with the server automatically. To do this, in the `addons/sourcemod` folder make a directory `extensions` and in it create a file `name.autoload`, where _name_ is the name of your extension.
+1. To disable/remove the safetyhook/cdetour you need to comment out or delete the line in the [AMBuilder#L34](https://github.com/orangevichHeh/sm-ext-template/blob/main/AMBuilder#L34) 
 
 ## `PackageScript` File
 This file is used to add the necessary files for your expansion to work, like for example: gamedata, config or autoload.
 To add autoload you need to uncomment the following lines (Autoload extension): [PackageScript#L49-51](https://github.com/orangevichHeh/sm-ext-template/blob/main/PackageScript#L49-L51)
+
 
 ## Credits
  - [SourceMod](https://github.com/alliedmodders/sourcemod/)
