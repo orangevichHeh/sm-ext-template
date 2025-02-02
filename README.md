@@ -73,3 +73,6 @@ To add autoload you need to uncomment the following lines (Autoload extension): 
  - [SourceMod Sample Extension](https://github.com/alliedmodders/sourcemod/tree/master/public/sample_ext)
  - [Building SourceMod](https://wiki.alliedmods.net/Building_SourceMod)
  - [Writing Extensions](https://wiki.alliedmods.net/Writing_Extensions)
+
+## License
+sm-ext-template is licensed under the GNU General Public License version 3.
